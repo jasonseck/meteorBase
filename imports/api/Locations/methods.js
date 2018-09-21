@@ -2,45 +2,45 @@
 
 import { Meteor } from 'meteor/meteor';
 import { check, Match } from 'meteor/check';
-import Cities from './City';
+import Locations from './Locations';
 import handleMethodException from '../../modules/handle-method-exception';
 import rateLimit from '../../modules/rate-limit';
 
 Meteor.methods({
-  'cities.findOne': function citiesFindOne(cityId) {
-    check(cityId, Match.OneOf(String, undefined));
+  'locations.findOne': function locationsFindOne(locationId) {
+    check(locationId, Match.OneOf(String, undefined));
 
     try {
-      return Cities.findOne(documentId);
+      return Locations.findOne(locationId);
     } catch (exception) {
       handleMethodException(exception);
     }
   },
-  'cities.insert': function citiesInsert(doc) {
-    check(doc, {
+  'locations.insert': function locationsInsert(location) {
+    check(location, {
       name: String,
       state: String,
     });
 
     try {
-      return Cities.insert({ doc });
+      return Locations.insert({ location });
     } catch (exception) {
       handleMethodException(exception);
     }
   },
-  'cities.update': function citiesUpdate(doc) {
-    check(doc, {
+  'locations.update': function locationsUpdate(location) {
+    check(location, {
       _id: String,
       name: String,
       state: String,
     });
 
     try {
-      const cityId = doc._id;
-      const cityToUpdate = Cities.findOne(cityId);
+      const locationId = location._id;
+      const locationToUpdate = Locations.findOne(locationId);
 
-      if (cityToUpdate) {
-        Cities.update(documentId, { $set: doc });
+      if (locationToUpdate) {
+        Locations.update(locationId, { $set: location });
         return cityId; // Return _id so we can redirect to document after update.
       }
 
@@ -49,14 +49,14 @@ Meteor.methods({
       handleMethodException(exception);
     }
   },
-  'cities.remove': function citiesRemove(cityId) {
-    check(cityId, String);
+  'locations.remove': function locationsRemove(locationId) {
+    check(locationId, String);
 
     try {
-      const cityToRemove = Cities.findOne(cityId);
+      const locationToRemove = Locations.findOne(locationId);
 
-      if (cityToRemove) {
-        return Cities.remove(cityId);
+      if (locationToRemove) {
+        return Locations.remove(locationId);
       }
       throw new Meteor.Error('403', 'Sorry, pup. You\'re not allowed to delete this document.');
     } catch (exception) {
@@ -67,9 +67,9 @@ Meteor.methods({
 
 rateLimit({
   methods: [
-    'cities.insert',
-    'cities.update',
-    'cities.remove',
+    'locations.insert',
+    'locations.update',
+    'locations.remove',
   ],
   limit: 5,
   timeRange: 1000,
