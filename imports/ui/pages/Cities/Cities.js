@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import { Bert } from 'meteor/themeteorchef:bert';
-import DocumentsCollection from '../../../api/Documents/Documents';
+import CitiesCollection from '../../../api/Cities/City';
 import { timeago, monthDayYearAtTime } from '../../../modules/dates';
 import Loading from '../../components/Loading/Loading';
 import BlankState from '../../components/BlankState/BlankState';
@@ -30,15 +30,15 @@ const handleRemove = (documentId) => {
   }
 };
 
-const Documents = ({
-  loading, documents, match, history,
+const Cities = ({
+  loading, cities, match, history,
 }) => (!loading ? (
   <StyledDocuments>
     <div className="page-header clearfix">
       <h4 className="pull-left">Documents</h4>
       <Link className="btn btn-success pull-right" to={`${match.url}/new`}>Add Document</Link>
     </div>
-    {documents.length ?
+    {cities.length ?
       <Table responsive>
         <thead>
           <tr>
@@ -50,11 +50,11 @@ const Documents = ({
           </tr>
         </thead>
         <tbody>
-          {documents.map(({
-            _id, title, createdAt, updatedAt,
+          {cities.map(({
+            _id, name, createdAt, updatedAt,
           }) => (
             <tr key={_id}>
-              <td>{title}</td>
+              <td>{name}</td>
               <td>{timeago(updatedAt)}</td>
               <td>{monthDayYearAtTime(createdAt)}</td>
               <td>
@@ -91,17 +91,17 @@ const Documents = ({
   </StyledDocuments>
 ) : <Loading />);
 
-Documents.propTypes = {
+Cities.propTypes = {
   loading: PropTypes.bool.isRequired,
-  documents: PropTypes.arrayOf(PropTypes.object).isRequired,
+  cities: PropTypes.arrayOf(PropTypes.object).isRequired,
   match: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
 };
 
 export default withTracker(() => {
-  const subscription = Meteor.subscribe('documents');
+  const subscription = Meteor.subscribe('cities.all');
   return {
     loading: !subscription.ready(),
-    documents: DocumentsCollection.find().fetch(),
+    cities: CitiesCollection.find().fetch(),
   };
-})(Documents);
+})(Cities);
