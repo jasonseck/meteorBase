@@ -12,13 +12,14 @@ import { Bert } from 'meteor/themeteorchef:bert';
 import App from '../../ui/layouts/App/App';
 import mainReducer from '../../modules/redux/reducers';
 import '../both/api';
+import logger from 'redux-logger';
 
 Bert.defaults.style = 'growl-bottom-right';
 
 const preloadedState = window.__PRELOADED_STATE__;
 delete window.__PRELOADED_STATE__;
 
-const store = createStore(mainReducer, preloadedState, applyMiddleware(thunk));
+const store = createStore(mainReducer, preloadedState, applyMiddleware(thunk,logger));
 
 injectGlobal`
   :root {
@@ -48,7 +49,7 @@ injectGlobal`
     position: relative;
     min-height: 100%;
   }
-  
+
   body {
     margin-bottom: 80px;
     margin: 0;

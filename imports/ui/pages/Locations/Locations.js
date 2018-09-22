@@ -99,9 +99,9 @@ Locations.propTypes = {
 };
 
 export default withTracker(() => {
-  const subscription = Meteor.subscribe('locations.all');
+  const subscription = Meteor.subscribe('locations.all',{limit:25,skip:0});
   return {
     loading: !subscription.ready(),
-    locations: LocationsCollection.find().fetch(),
+    locations: LocationsCollection.find({},{limit:25,skip:0}).fetch(),
   };
 })(Locations);
