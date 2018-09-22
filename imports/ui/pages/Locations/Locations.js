@@ -11,6 +11,8 @@ import LocationsCollection from '../../../api/Locations/Locations';
 import { timeago, monthDayYearAtTime } from '../../../modules/dates';
 import Loading from '../../components/Loading/Loading';
 import BlankState from '../../components/BlankState/BlankState';
+import compose from 'recompose/compose';
+import { connect } from 'react-redux';
 
 const StyledDocuments = styled.div`
   table tbody tr td {
@@ -31,8 +33,8 @@ const handleRemove = (documentId) => {
 };
 
 const Locations = ({
-  loading, locations, match, history,
-}) => (!loading ? (
+  loading, locations, match, history, ...props
+}) => { console.log(props);return (!loading ? (
   <StyledDocuments>
     <div className="page-header clearfix">
       <h4 className="pull-left">Documents</h4>
@@ -59,7 +61,6 @@ const Locations = ({
               <td>{monthDayYearAtTime(createdAt)}</td>
               <td>
                 <Button
-                  bsStyle="primary"
                   onClick={() => history.push(`${match.url}/${_id}`)}
                   block
                 >
@@ -68,7 +69,6 @@ const Locations = ({
               </td>
               <td>
                 <Button
-                  bsStyle="danger"
                   onClick={() => handleRemove(_id)}
                   block
                 >
@@ -78,6 +78,9 @@ const Locations = ({
             </tr>
           ))}
         </tbody>
+        <Button
+          onClick={()=> props.increaseSkip()}
+        >NEXT</Button>
       </Table> : <BlankState
         icon={{ style: 'solid', symbol: 'file-alt' }}
         title="You're plum out of documents, friend!"
@@ -89,7 +92,7 @@ const Locations = ({
         }}
       />}
   </StyledDocuments>
-) : <Loading />);
+) : <Loading />)};
 
 Locations.propTypes = {
   loading: PropTypes.bool.isRequired,
@@ -97,11 +100,28 @@ Locations.propTypes = {
   match: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
 };
+const mapDispatchToProps = dispatch => ({
+  mylogin : () => dispatch(handleOnLogin()),
+  increaseSkip : () => dispatch ({ type:'INCREASE_SKIP'})
+})
+export default compose(
+  withTracker(()=>{
+    const subscription = Meteor.subscribe('locations.all',{limit:25,skip:0});
+    return {
+      loading: !subscription.ready(),
+      locations: LocationsCollection.find({},{limit:25,skip:0}).fetch(),
+    };
+  }),
+  connect(
+    null,
+    mapDispatchToProps
+  )
+)(Locations);
 
-export default withTracker(() => {
-  const subscription = Meteor.subscribe('locations.all',{limit:25,skip:0});
-  return {
-    loading: !subscription.ready(),
-    locations: LocationsCollection.find({},{limit:25,skip:0}).fetch(),
-  };
-})(Locations);
+//export default withTracker(() => {
+//  const subscription = Meteor.subscribe('locations.all',{limit:25,skip:0});
+//  return {
+//    loading: !subscription.ready(),
+//    locations: LocationsCollection.find({},{limit:25,skip:0}).fetch(),
+//  };
+//})(Locations);

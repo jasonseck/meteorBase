@@ -10,7 +10,7 @@ import thunk from 'redux-thunk';
 import { Meteor } from 'meteor/meteor';
 import { Bert } from 'meteor/themeteorchef:bert';
 import App from '../../ui/layouts/App/App';
-import mainReducer from '../../modules/redux/reducers';
+import mainReducer from '../../modules/redux/loginReducer';
 import '../both/api';
 import logger from 'redux-logger';
 
