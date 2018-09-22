@@ -42,6 +42,14 @@ const Locations = ({
     </div>
     {locations.length ?
       <Table responsive>
+      <Button
+        onClick={()=> props.decreaseSkip()}
+      >PREV</Button>
+
+      <Button
+        onClick={()=> props.increaseSkip()}
+      >NEXT</Button>
+
         <thead>
           <tr>
             <th>Title</th>
@@ -112,10 +120,10 @@ const mapDispatchToProps = dispatch => ({
 export default compose(
   withTracker((props)=>{
     console.log(props.count.skip)
-    const subscription = Meteor.subscribe('locations.all',{limit:25,skip:props.count.skip});
+    const subscription = Meteor.subscribe('locations.all',{limit:25 * props.count.skip,skip:props.count.skip});
     return {
       loading: !subscription.ready(),
-      locations: LocationsCollection.find({},{limit:25,skip:props.count.skip}).fetch(),
+      locations: LocationsCollection.find({},{sort:{name:1}, limit:25 * props.count.skip ,skip:props.count.skip}).fetch(),
     };
   }),
   connect(
