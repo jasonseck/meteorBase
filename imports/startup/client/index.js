@@ -10,7 +10,7 @@ import thunk from 'redux-thunk';
 import { Meteor } from 'meteor/meteor';
 import { Bert } from 'meteor/themeteorchef:bert';
 import App from '../../ui/layouts/App/App';
-import mainReducer from '../../modules/redux/loginReducer';
+import rootReducer from '../../modules/redux/reducers/rootReducer';
 import '../both/api';
 import logger from 'redux-logger';
 
@@ -19,7 +19,7 @@ Bert.defaults.style = 'growl-bottom-right';
 const preloadedState = window.__PRELOADED_STATE__;
 delete window.__PRELOADED_STATE__;
 
-const store = createStore(mainReducer, preloadedState, applyMiddleware(thunk,logger));
+const store = createStore(rootReducer, preloadedState, applyMiddleware(thunk,logger));
 
 injectGlobal`
   :root {

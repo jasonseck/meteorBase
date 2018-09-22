@@ -9,8 +9,9 @@ import { Helmet } from 'react-helmet';
 import { ServerStyleSheet } from 'styled-components';
 import { Meteor } from 'meteor/meteor';
 import App from '../../ui/layouts/App/App';
-import mainReducer from '../../modules/redux/reducers';
+import rootReducer from '../../modules/redux/reducers/rootReducer';
 import parseUrlForSSR from '../../modules/parse-url-for-ssr';
+import logger from 'redux-logger';
 
 onPageLoad((sink) => {
   const documentURL = parseUrlForSSR(sink.request.url, 'documents');
@@ -28,7 +29,7 @@ onPageLoad((sink) => {
     doc: documentURL.isMatch ? Meteor.call('documents.findOne', documentURL.parts[1]) : '',
   };
 
-  const store = createStore(mainReducer, data, applyMiddleware(thunk));
+  const store = createStore(rootReducer, data, applyMiddleware(thunk,logger));
   const initialData = store.getState();
   const stylesheet = new ServerStyleSheet();
 

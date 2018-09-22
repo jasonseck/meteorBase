@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { Roles } from 'meteor/alanning:roles';
-import getUserName from '../get-user-name';
+import getUserName from '../../get-user-name';
 
 export function onLogin() {
   return (dispatch) => {

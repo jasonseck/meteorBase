@@ -79,6 +79,10 @@ const Locations = ({
           ))}
         </tbody>
         <Button
+          onClick={()=> props.decreaseSkip()}
+        >PREV</Button>
+
+        <Button
           onClick={()=> props.increaseSkip()}
         >NEXT</Button>
       </Table> : <BlankState
@@ -102,14 +106,16 @@ Locations.propTypes = {
 };
 const mapDispatchToProps = dispatch => ({
   mylogin : () => dispatch(handleOnLogin()),
-  increaseSkip : () => dispatch ({ type:'INCREASE_SKIP'})
+  increaseSkip : () => dispatch ({ type:'INCREASE_SKIP'}),
+  decreaseSkip : () => dispatch ({ type:'DECREASE_SKIP'})
 })
 export default compose(
-  withTracker(()=>{
-    const subscription = Meteor.subscribe('locations.all',{limit:25,skip:0});
+  withTracker((props)=>{
+    console.log(props.count.skip)
+    const subscription = Meteor.subscribe('locations.all',{limit:25,skip:props.count.skip});
     return {
       loading: !subscription.ready(),
-      locations: LocationsCollection.find({},{limit:25,skip:0}).fetch(),
+      locations: LocationsCollection.find({},{limit:25,skip:props.count.skip}).fetch(),
     };
   }),
   connect(

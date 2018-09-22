@@ -41,7 +41,7 @@ import Privacy from '../../pages/Privacy/Privacy';
 import ExamplePage from '../../pages/ExamplePage/ExamplePage';
 import VerifyEmailAlert from '../../components/VerifyEmailAlert/VerifyEmailAlert';
 import GDPRConsentModal from '../../components/GDPRConsentModal/GDPRConsentModal';
-import { onLogin, onLogout } from '../../../modules/redux/actions';
+import { onLogin, onLogout } from '../../../modules/redux/actions/actions';
 import withTrackerSSR from '../../../modules/with-tracker-ssr';
 import getUserName from '../../../modules/get-user-name';
 
@@ -95,6 +95,7 @@ class App extends React.Component {
   }
 
   render() {
+    console.log(this.props)
     const { props, state, setAfterLoginPath } = this;
     return (
       <StyledApp ready={this.state.ready} loading={props.loading}>
