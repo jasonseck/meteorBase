@@ -121,8 +121,8 @@ export default compose(
   withTracker((props)=>{
     console.log(props.count.skip)
     const subscription = Meteor.subscribe('locations.all',{
-      skip:(props.count.skip * 100),
-      limit:100
+      skip:(props.count.skip * props.count.limit),
+      limit:props.count.limit
     });
     return {
       loading: !subscription.ready(),

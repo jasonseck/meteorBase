@@ -1,4 +1,4 @@
-const countReducer = (state = {limit:25,skip:0}, action) => {
+const countReducer = (state = {limit:75,skip:0}, action) => {
   console.log('skip reducer firing');
   switch(action.type) {
     case 'INCREASE_SKIP':
