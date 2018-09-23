@@ -120,15 +120,18 @@ const mapDispatchToProps = dispatch => ({
 export default compose(
   withTracker((props)=>{
     console.log(props.count.skip)
+    var locationCount = Meteor.call('locations.count',function(error,result){
+      console.log(result);
+    });
+
     const subscription = Meteor.subscribe('locations.all',{
       skip:(props.count.skip * props.count.limit),
       limit:props.count.limit
     });
     return {
       loading: !subscription.ready(),
-      locations: LocationsCollection.find({},
-      {
-      }).fetch(),
+      locations: LocationsCollection.find({}).fetch(),
+      locationCount : Meteor.call('locations.count',function(error,result){return result;})
     };
   }),
   connect(

@@ -63,7 +63,13 @@ Meteor.methods({
       handleMethodException(exception);
     }
   },
+  'locations.count': function locationsCount() {
+    var count = Locations.find({}).count();
+    console.log(count);
+    return count;
+  }
 });
+
 
 rateLimit({
   methods: [
