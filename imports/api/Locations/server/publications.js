@@ -9,8 +9,8 @@ Meteor.publish('locations.all', params => {
     skip:Number
   });
   return Locations.find({},{
-                            sort:{name:1},
+                            skip:params.skip,
                             limit:params.limit,
-                            skip:params.skip
+                            sort:{name:1}
   });
 });

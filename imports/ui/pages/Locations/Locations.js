@@ -121,15 +121,13 @@ export default compose(
   withTracker((props)=>{
     console.log(props.count.skip)
     const subscription = Meteor.subscribe('locations.all',{
-      limit:(props.count.skip > 0 ? 50*props.count.skip : 50),
-      skip:50 * props.count.skip
+      skip:(props.count.skip * 100),
+      limit:100
     });
     return {
       loading: !subscription.ready(),
-      locations: LocationsCollection.find({},{
-        sort:{name:1},
-        limit:50*props.count.skip ,
-        skip:50 * props.count.skip-50
+      locations: LocationsCollection.find({},
+      {
       }).fetch(),
     };
   }),
