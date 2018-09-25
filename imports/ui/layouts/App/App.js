@@ -155,10 +155,12 @@ App.propTypes = {
   handleOnLogout: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => ({ ...state });
+const mapStateToProps = state => ({
+  ...state
+});
 const mapDispatchToProps = dispatch => ({
   handleOnLogin: data => dispatch(onLogin(data)),
-  handleOnLogout: data => dispatch(onLogout(data)),
+  handleOnLogout: data => dispatch(onLogout(data))
 });
 
 export default compose(

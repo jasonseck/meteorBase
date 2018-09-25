@@ -6,9 +6,13 @@ Meteor.publish('locations.all', params => {
   console.log(params);
   check(params, {
     limit: Number,
-    skip:Number
+    skip:Number,
+    name:String,
   });
-  return Locations.find({},{
+  var regex = new RegExp(params.name,"i");
+  return Locations.find({
+                          "name" : regex
+                        },{
                             skip:params.skip,
                             limit:params.limit,
                             sort:{name:1}

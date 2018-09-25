@@ -34,7 +34,7 @@ const handleRemove = (documentId) => {
 
 const Locations = ({
   loading, locations, match, history, ...props
-}) => { console.log(props);return (!loading ? (
+}) => { console.log(locations);return (!loading ? (
   <StyledDocuments>
     <div className="page-header clearfix">
       <h4 className="pull-left">Documents</h4>
@@ -49,7 +49,12 @@ const Locations = ({
       <Button
         onClick={()=> props.increaseSkip()}
       >NEXT</Button>
-
+      <Button
+        onClick={()=> props.updateFilter('santa')}
+      >FILTER</Button>
+      <input
+        onChange={(e)=>props.updateFilter(e.target.value)}
+        />
         <thead>
           <tr>
             <th>Title</th>
@@ -61,7 +66,7 @@ const Locations = ({
         </thead>
         <tbody>
           {locations.map(({
-            _id, name, createdAt, updatedAt,
+            _id, name, createdAt, updatedAt
           }) => (
             <tr key={_id}>
               <td>{name}</td>
@@ -115,23 +120,27 @@ Locations.propTypes = {
 const mapDispatchToProps = dispatch => ({
   mylogin : () => dispatch(handleOnLogin()),
   increaseSkip : () => dispatch ({ type:'INCREASE_SKIP'}),
-  decreaseSkip : () => dispatch ({ type:'DECREASE_SKIP'})
+  decreaseSkip : () => dispatch ({ type:'DECREASE_SKIP'}),
+  updateFilter: data => {
+    dispatch({
+      type:'CHANGE_FILTER',
+      data:data
+    })
+  }
+
 })
 export default compose(
   withTracker((props)=>{
     console.log(props.count.skip)
-    var locationCount = Meteor.call('locations.count',function(error,result){
-      console.log(result);
-    });
 
     const subscription = Meteor.subscribe('locations.all',{
       skip:(props.count.skip * props.count.limit),
-      limit:props.count.limit
+      limit:props.count.limit,
+      name:props.filter.filter
     });
     return {
       loading: !subscription.ready(),
       locations: LocationsCollection.find({}).fetch(),
-      locationCount : Meteor.call('locations.count',function(error,result){return result;})
     };
   }),
   connect(
