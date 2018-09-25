@@ -139,6 +139,19 @@ render() {
         >CLEAR</Button>
 
       </div>
+      <div>
+      {this.props.count.skip > 0 &&
+        <Button
+          onClick={()=> this.props.decreaseSkip()}
+        >PREV</Button>
+
+      }
+      {this.props.locations.length == 75 &&
+        <Button
+          onClick={()=> this.props.increaseSkip()}
+        >NEXT</Button>
+      }
+      </div>
       <Locations {...this.props}/>
     </div>
 
