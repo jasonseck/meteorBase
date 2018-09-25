@@ -31,7 +31,6 @@ const handleRemove = (documentId) => {
     });
   }
 };
-
 const Locations = ({
   loading, locations, match, history, ...props
 }) => { console.log(locations);return (!loading ? (
@@ -42,20 +41,18 @@ const Locations = ({
     </div>
     {locations.length ?
       <Table responsive>
-      <Button
-        onClick={()=> props.decreaseSkip()}
-      >PREV</Button>
+      {props.count.skip > 0 &&
+        <Button
+          onClick={()=> props.decreaseSkip()}
+        >PREV</Button>
 
-      <Button
-        onClick={()=> props.increaseSkip()}
-      >NEXT</Button>
-      <Button
-        onClick={()=> props.updateFilter('santa')}
-      >FILTER</Button>
-      <input
-        value={props.filter.filter}
-        onChange={(e)=>props.updateFilter(e.target.value)}
-        />
+      }
+      {locations.length == 75 &&
+        <Button
+          onClick={()=> props.increaseSkip()}
+        >NEXT</Button>
+      }
+
         <thead>
           <tr>
             <th>Title</th>
@@ -92,13 +89,19 @@ const Locations = ({
             </tr>
           ))}
         </tbody>
-        <Button
-          onClick={()=> props.decreaseSkip()}
-        >PREV</Button>
+        {props.count.skip > 0 &&
+          <Button
+            onClick={()=> props.decreaseSkip()}
+          >PREV</Button>
 
-        <Button
-          onClick={()=> props.increaseSkip()}
-        >NEXT</Button>
+        }
+
+        {locations.length == 75 &&
+          <Button
+            onClick={()=> props.increaseSkip()}
+          >NEXT</Button>
+        }
+
       </Table> : <BlankState
         icon={{ style: 'solid', symbol: 'file-alt' }}
         title="You're plum out of documents, friend!"
@@ -112,7 +115,35 @@ const Locations = ({
   </StyledDocuments>
 ) : <Loading />)};
 
-Locations.propTypes = {
+class Locations2 extends React.Component {
+constructor(props) {
+  super(props)
+  this.state = {
+    name: 'Santa'
+  }
+}
+render() {
+  console.log(this.props);
+  var {loading, locations, match, history} = this.props;
+  return (
+    <div>
+      <div>
+      <Button
+        onClick={()=> this.props.clearFilter()}
+      >CLEAR</Button>
+      <input
+        value={this.props.filter.filter}
+        onChange={(e)=>this.props.updateFilter(e.target.value)}
+        />
+      </div>
+      <Locations {...this.props}/>
+    </div>
+
+  )
+}
+};
+
+Locations2.propTypes = {
   loading: PropTypes.bool.isRequired,
   locations: PropTypes.arrayOf(PropTypes.object).isRequired,
   match: PropTypes.object.isRequired,
@@ -127,7 +158,8 @@ const mapDispatchToProps = dispatch => ({
       type:'CHANGE_FILTER',
       data:data
     })
-  }
+  },
+  clearFilter: () => dispatch({ type:'CLEAR_FILTER'})
 
 })
 export default compose(
@@ -141,14 +173,15 @@ export default compose(
     });
     return {
       loading: !subscription.ready(),
-      locations: LocationsCollection.find({}).fetch(),
+      locations: LocationsCollection.find({}).fetch()
+
     };
   }),
   connect(
     null,
     mapDispatchToProps
   )
-)(Locations);
+)(Locations2);
 
 //export default withTracker(() => {
 //  const subscription = Meteor.subscribe('locations.all',{limit:25,skip:0});

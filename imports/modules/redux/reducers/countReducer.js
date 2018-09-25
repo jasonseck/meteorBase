@@ -11,6 +11,16 @@ const countReducer = (state = {limit:75,skip:0}, action) => {
         ...state,
         skip: state.skip - 1,
       }
+    case 'CHANGE_FILTER':
+      return {
+        ...state,
+        skip:0
+      }
+    case 'CLEAR_FILTER':
+      return {
+        ...state,
+        skip:0
+      }
       default:
         return state;
   }

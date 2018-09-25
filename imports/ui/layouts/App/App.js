@@ -23,6 +23,7 @@ import EditDocument from '../../pages/EditDocument/EditDocument';
 
 import Cities from '../../pages/Cities/Cities';
 import Locations from '../../pages/Locations/Locations';
+import Locations2 from '../../pages/Locations/Locations2';
 
 import Signup from '../../pages/Signup/Signup';
 import Login from '../../pages/Login/Login';
@@ -116,6 +117,7 @@ class App extends React.Component {
             <Route exact path="/documents/:_id" component={ViewDocument} />
             <Authenticated exact path="/cities" component={Cities} setAfterLoginPath={setAfterLoginPath} {...props} {...state} />
             <Authenticated exact path="/locations" component={Locations} setAfterLoginPath={setAfterLoginPath} {...props} {...state} />
+            <Authenticated exact path="/locations2" component={Locations2} setAfterLoginPath={setAfterLoginPath} {...props} {...state} />
 
             <Authenticated exact path="/documents/:_id/edit" component={EditDocument} setAfterLoginPath={setAfterLoginPath} {...props} {...state} />
             <Authenticated exact path="/profile" component={Profile} setAfterLoginPath={setAfterLoginPath} {...props} {...state} />
