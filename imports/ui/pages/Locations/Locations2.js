@@ -128,13 +128,16 @@ render() {
   return (
     <div>
       <div>
-      <Button
-        onClick={()=> this.props.clearFilter()}
-      >CLEAR</Button>
       <input
         value={this.props.filter.filter}
         onChange={(e)=>this.props.updateFilter(e.target.value)}
+        style={{paddingRight:'60px'}}
         />
+        <Button
+          onClick={()=> this.props.clearFilter()}
+          style={{marginLeft:'-60px'}}
+        >CLEAR</Button>
+
       </div>
       <Locations {...this.props}/>
     </div>
